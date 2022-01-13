@@ -176,7 +176,7 @@ let lastChecked;
  * @param {string} id checkbox id
  * @returns number
  */
-function getIdNumber(id = '') {
+function getIdNumber(id) {
   const idNum = id.split('-')[1];
   return Number(idNum);
 }
@@ -195,13 +195,6 @@ function handleClick(e) {
     for (let i = low; i <= high; i++) {
       document.querySelector(`#episode-${i}`).checked = true;
     }
-
-    // checkboxes.forEach((checkbox) => {
-    //   const currentId = Number(checkbox.id);
-    //   if (currentId >= low && currentId <= high) {
-    //     checkbox.checked = true;
-    //   }
-    // });
   }
 
   lastChecked = this;
