@@ -154,11 +154,12 @@ const episodes = [
  */
 const episodesHTML = episodes.reduce((start, episode) => {
   const { id, name } = episode;
+  const tag = `episode-${id}`;
   return (
     start +
     `<li>
-<label for="${id}">
-  <input type="checkbox" name="episode-${id}" id="${id}" />
+<label for="${tag}">
+  <input type="checkbox" name="${tag}" id="${tag}" />
   <span>${id} || ${name}</span>
 </label>
 </li>`
@@ -171,22 +172,36 @@ const checkboxes = document.querySelectorAll('input[type="checkbox"]');
 let lastChecked;
 
 /**
+ * Extracts the episode id as number
+ * @param {string} id checkbox id
+ * @returns number
+ */
+function getIdNumber(id = '') {
+  const idNum = id.split('-')[1];
+  return Number(idNum);
+}
+
+/**
  *
  * @param {MouseEvent<HTMLInputElement, MouseEvent>} e Event property passed into event handler
  */
 function handleClick(e) {
   if (e.shiftKey && lastChecked) {
-    const start = Number(lastChecked.id);
-    const end = Number(e.currentTarget.id);
+    const start = getIdNumber(lastChecked.id);
+    const end = getIdNumber(e.currentTarget.id);
     const low = Math.min(start, end);
     const high = Math.max(start, end);
 
-    checkboxes.forEach((checkbox) => {
-      const currentId = Number(checkbox.id);
-      if (currentId >= low && currentId <= high) {
-        checkbox.checked = true;
-      }
-    });
+    for (let i = low; i <= high; i++) {
+      document.querySelector(`#episode-${i}`).checked = true;
+    }
+
+    // checkboxes.forEach((checkbox) => {
+    //   const currentId = Number(checkbox.id);
+    //   if (currentId >= low && currentId <= high) {
+    //     checkbox.checked = true;
+    //   }
+    // });
   }
 
   lastChecked = this;
