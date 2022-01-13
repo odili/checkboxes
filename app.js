@@ -157,17 +157,15 @@ const episodesHTML = episodes.reduce((start, episode) => {
   return (
     start +
     `<li>
-<label for="episode-${id}">
-  <input type="checkbox" name="episode-${id}" id="episode-${id}" />
+<label for="${id}">
+  <input type="checkbox" name="episode-${id}" id="${id}" />
   <span>${id} || ${name}</span>
 </label>
 </li>`
   );
 }, '');
 
-const episodeList = document.querySelector('ul');
-
-episodeList.innerHTML = episodesHTML;
+document.querySelector('ul').innerHTML = episodesHTML;
 
 const checkboxes = document.querySelectorAll('input[type="checkbox"]');
 let lastChecked;
@@ -177,14 +175,15 @@ let lastChecked;
  * @param {MouseEvent<HTMLInputElement, MouseEvent>} e Event property passed into event handler
  */
 function handleClick(e) {
-  let inBetween = false;
+  if (e.shiftKey && lastChecked) {
+    const start = Number(lastChecked.id);
+    const end = Number(e.currentTarget.id);
+    const low = Math.min(start, end);
+    const high = Math.max(start, end);
 
-  if (e.shiftKey && this.checked) {
     checkboxes.forEach((checkbox) => {
-      if (checkbox === this || checkbox === lastChecked) {
-        inBetween = !inBetween;
-      }
-      if (inBetween) {
+      const currentId = Number(checkbox.id);
+      if (currentId >= low && currentId <= high) {
         checkbox.checked = true;
       }
     });
