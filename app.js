@@ -186,18 +186,23 @@ function getIdNumber(id) {
  * @param {MouseEvent<HTMLInputElement, MouseEvent>} e Event property passed into event handler
  */
 function handleClick(e) {
-  if (e.shiftKey && lastChecked) {
-    const start = getIdNumber(lastChecked.id);
-    const end = getIdNumber(e.currentTarget.id);
-    const low = Math.min(start, end);
-    const high = Math.max(start, end);
+  if (e.shiftKey && !lastChecked) {
+    this.checked = false;
+    lastChecked = this;
+  } else {
+    if (lastChecked) {
+      const start = getIdNumber(lastChecked.id);
+      const end = getIdNumber(e.currentTarget.id);
+      const low = Math.min(start, end);
+      const high = Math.max(start, end);
 
-    for (let i = low; i <= high; i++) {
-      document.querySelector(`#episode-${i}`).checked = true;
+      for (let i = low; i <= high; i++) {
+        document.querySelector(`#episode-${i}`).checked = true;
+      }
+
+      lastChecked = null;
     }
   }
-
-  lastChecked = this;
 }
 
 checkboxes.forEach((checkbox) => {
